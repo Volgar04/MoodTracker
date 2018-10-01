@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MoodTracker</string>
+    <string name="toastTop">Haut</string>
+    <string name="toastRight">Droite</string>
+    <string name="toastLeft">Gauche</string>
+    <string name="toastBottom">Bas</string>
+</resources>
