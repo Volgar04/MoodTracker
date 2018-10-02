@@ -30,6 +30,11 @@ public class MainActivity extends AppCompatActivity {
         imageHistory=findViewById(R.id.imageHistory);
         initializeView();
 
+
+        /**
+         * Tests et affichages d'où on se situe en fonction des écrans d'humeur
+         */
+
         principalScreen.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
             public void onSwipeTop() {
                 actualScreen--;
@@ -82,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         /**
-         *
+         * Lancer un AlertDialogue quand l'utilisateur veut ajouter un commentaire
          */
 
         imageComment.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +119,11 @@ public class MainActivity extends AppCompatActivity {
                 alertComment.show();
             }
         });
+
+
+        /**
+         * Lancer une nouvelle activitée quand l'utilisateur veut consulter son historique d'humeur
+         */
 
         imageHistory.setOnClickListener(new View.OnClickListener() {
             @Override
