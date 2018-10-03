@@ -1,5 +1,6 @@
 package com.nicolappli.moodtracker;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,81 +13,89 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
-    RelativeLayout principalScreen;
-    ImageView imageSmiley;
-    ImageButton imageComment;
-    ImageButton imageHistory;
-    int actualMoodScreen = 1;
+    /**
+     * Declarations of variables
+     */
+    private RelativeLayout principalScreen;
+    private ImageView imageSmiley;
+    public ImageButton imageComment;
+    public ImageButton imageHistory;
+    private int actualMoodScreen = 1;
+    private List<Integer> color;
+    private List<Integer> drawable;
+
+    /**
+     * Method allowing to get back the good color of the background
+     */
+    private void initColor(){
+        color = new ArrayList<>();
+
+        color.add(R.color.banana_yellow); //=0
+        color.add(R.color.light_sage); //=1
+        color.add(R.color.cornflower_blue_65); //=2
+        color.add(R.color.warm_grey); //=3
+        color.add(R.color.faded_red); //=4
+    }
+
+    /**
+     * Method allowing to get back the good smiley
+     */
+    private void initDrawable(){
+        drawable = new ArrayList<>();
+
+        drawable.add(R.drawable.smiley_super_happy); //=0
+        drawable.add(R.drawable.smiley_happy); //=1
+        drawable.add(R.drawable.smiley_normal); //=2
+        drawable.add(R.drawable.smiley_disappointed); //=3
+        drawable.add(R.drawable.smiley_sad); //=4
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+            //Connection of variables
         principalScreen=findViewById(R.id.principalScreen);
         imageSmiley=findViewById(R.id.imageSmiley);
         imageComment=findViewById(R.id.imageComment);
         imageHistory=findViewById(R.id.imageHistory);
 
-        /**
-         * Tests et affichages d'où on se situe en fonction des écrans d'humeur
-         */
+        initColor();
+        initDrawable();
 
+
+            //Display of the various screens according to gestures
         principalScreen.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
             public void onSwipeTop() {
                 actualMoodScreen--;
-                if (actualMoodScreen == 0) {
-                    principalScreen.setBackgroundResource(R.color.banana_yellow);
-                    imageSmiley.setImageResource(R.drawable.smiley_super_happy);
-                } else if (actualMoodScreen == 1) {
-                    principalScreen.setBackgroundResource(R.color.light_sage);
-                    imageSmiley.setImageResource(R.drawable.smiley_happy);
-                } else if (actualMoodScreen == 2) {
-                    principalScreen.setBackgroundResource(R.color.cornflower_blue_65);
-                    imageSmiley.setImageResource(R.drawable.smiley_normal);
-                } else if (actualMoodScreen == 3) {
-                    principalScreen.setBackgroundResource(R.color.warm_grey);
-                    imageSmiley.setImageResource(R.drawable.smiley_disappointed);
-                } else if (actualMoodScreen == 4) {
-                    principalScreen.setBackgroundResource(R.color.faded_red);
-                    imageSmiley.setImageResource(R.drawable.smiley_sad);
-                } else if (actualMoodScreen==5) {
-                    actualMoodScreen=4;
-                } else {
+                if(actualMoodScreen<0){
                     actualMoodScreen=0;
                 }
+                    principalScreen.setBackgroundResource(color.get(actualMoodScreen));
+                    imageSmiley.setImageResource(drawable.get(actualMoodScreen));
             }
 
             public void onSwipeBottom() {
                 actualMoodScreen++;
-                if (actualMoodScreen == 0) {
-                    principalScreen.setBackgroundResource(R.color.banana_yellow);
-                    imageSmiley.setImageResource(R.drawable.smiley_super_happy);
-                } else if (actualMoodScreen == 1) {
-                    principalScreen.setBackgroundResource(R.color.light_sage);
-                    imageSmiley.setImageResource(R.drawable.smiley_happy);
-                } else if (actualMoodScreen == 2) {
-                    principalScreen.setBackgroundResource(R.color.cornflower_blue_65);
-                    imageSmiley.setImageResource(R.drawable.smiley_normal);
-                } else if (actualMoodScreen == 3) {
-                    principalScreen.setBackgroundResource(R.color.warm_grey);
-                    imageSmiley.setImageResource(R.drawable.smiley_disappointed);
-                } else if (actualMoodScreen == 4) {
-                    principalScreen.setBackgroundResource(R.color.faded_red);
-                    imageSmiley.setImageResource(R.drawable.smiley_sad);
-                } else if (actualMoodScreen==5) {
+                if(actualMoodScreen>4){
                     actualMoodScreen=4;
-                } else {
-                    actualMoodScreen=0;
                 }
+                principalScreen.setBackgroundResource(color.get(actualMoodScreen));
+                imageSmiley.setImageResource(drawable.get(actualMoodScreen));
             }
         });
 
-        /**
-         * Lancer un AlertDialogue quand l'utilisateur veut ajouter un commentaire
-         */
 
+            //Launch an AlertDialogue when the user want to add a commentary
         imageComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,9 +110,12 @@ public class MainActivity extends AppCompatActivity {
                 mOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if(!mComment.getText().toString().isEmpty()){
+                        if(mComment.getText().toString().length()>=255){
+                            Toast.makeText(MainActivity.this,"Le commentaire doit être inférieur ou égal a 255",Toast.LENGTH_SHORT).show();
+                        }else if(!mComment.getText().toString().isEmpty()){
                             Toast.makeText(MainActivity.this,"Commentaire reçu",Toast.LENGTH_SHORT).show();
-                        }else{
+                        }
+                        else{
                             Toast.makeText(MainActivity.this,"Veuillez écrire un commentaire !",Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -114,16 +126,11 @@ public class MainActivity extends AppCompatActivity {
                         alertComment.cancel();
                     }
                 });
-
-
             }
         });
 
 
-        /**
-         * Lancer une nouvelle activitée quand l'utilisateur veut consulter son historique d'humeur
-         */
-
+            //Launch an new activity when the user want to consult his mood history
         imageHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
