@@ -2,6 +2,8 @@ package com.nicolappli.moodtracker;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,9 +20,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    /**
-     * Declarations of variables
-     */
+            /**
+             * Declarations of variables
+             */
     private RelativeLayout principalScreen;
     private ImageView imageSmiley;
     public ImageButton imageComment;
@@ -29,9 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private List<Integer> color;
     private List<Integer> drawable;
 
-    /**
-     * Method allowing to get back the good color of the background
-     */
+            /**
+             * Method allowing to get back the good color of the background
+             */
     private void initColor(){
         color = new ArrayList<>();
 
@@ -42,9 +44,9 @@ public class MainActivity extends AppCompatActivity {
         color.add(R.color.faded_red); //=4
     }
 
-    /**
-     * Method allowing to get back the good smiley
-     */
+            /**
+             * Method allowing to get back the good smiley
+             */
     private void initDrawable(){
         drawable = new ArrayList<>();
 
@@ -61,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
             //Connection of variables
         principalScreen=findViewById(R.id.principalScreen);
