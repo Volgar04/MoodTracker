@@ -16,8 +16,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,11 +31,16 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageSmiley;
     public ImageButton imageComment;
     public ImageButton imageHistory;
-    private int actualMoodScreen = 1;
+
     private List<Integer> color;
     private List<Integer> drawable;
+
     public DBMood dbMood;
     private SQLiteDatabase db;
+
+    private String commentary;
+    private int actualMoodScreen = 1;
+
             /**
              * Method allowing to get back the good color of the background
              */
@@ -75,15 +83,16 @@ public class MainActivity extends AppCompatActivity {
         initColor();
         initDrawable();
 
+            //Creation of database
         dbMood = new DBMood(this, DBMood.Constants.DATABASE_NAME, null, DBMood.Constants.DATABASE_VERSION);
-
         openDB();
-
         ContentValues contentValues = new ContentValues();
         long rowId = insertRecord(contentValues);
-
         deleteRecord(rowId);
 
+            //Recovery of the current date
+        String currentDate = new SimpleDateFormat("dd", Locale.getDefault()).format(new Date());
+        System.out.println("current date => " + currentDate);
 
             //Display of the various screens according to gestures
         principalScreen.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
@@ -106,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
             //Launch an AlertDialogue when the user want to add a commentary
         imageComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
                         if(mComment.getText().toString().length()>=255){
                             Toast.makeText(MainActivity.this,"Le commentaire doit être inférieur ou égal a 255",Toast.LENGTH_SHORT).show();
                         }else if(!mComment.getText().toString().isEmpty()){
+                            commentary =mComment.getText().toString();
                             Toast.makeText(MainActivity.this,"Commentaire reçu",Toast.LENGTH_SHORT).show();
                         }
                         else{
@@ -141,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /****************** For the history activity *********************************************************************************************************************************************************/
+        //***************** For the history activity *********************************************************************************************************************************************************/
 
 
             //Launch an new activity when the user want to consult his mood history
@@ -155,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /****************** Database management ********************************************************************************************************************************************************************/
+    //***************** Database management ********************************************************************************************************************************************************************/
 
     /**
      * open the database
@@ -185,15 +194,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        System.out.println("moodSave => " + actualMoodScreen);
+        System.out.println("commentaire => " + commentary);
         closeDB();
     }
 
-    /****************** Insert a new line **********************************************************************************************************************************************************************/
+    //***************** Insert a new line **********************************************************************************************************************************************************************/
 
     private long insertRecord(ContentValues contentValues) {
         // Assign the values for each column.
-        contentValues.put(DBMood.Constants.KEY_COL_MOOD, "1");
-        contentValues.put(DBMood.Constants.KEY_COL_COMMENT, "Je suis de bonne humeur aujourd'hui !");
+        contentValues.put(DBMood.Constants.KEY_COL_MOOD, actualMoodScreen);
+        contentValues.put(DBMood.Constants.KEY_COL_COMMENT, commentary);
         contentValues.put(DBMood.Constants.KEY_COL_DATE, "22-01-2018");
 
         long rowId = db.insert(DBMood.Constants.MY_TABLE, null, contentValues);
@@ -208,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         return rowId;
     }
 
-    /****************** Delete a line ********************************************************************************************************************************************************************/
+    //***************** Delete a line ********************************************************************************************************************************************************************/
 
     private void deleteRecord(long rowId) {
         rowId = db.delete(DBMood.Constants.MY_TABLE,

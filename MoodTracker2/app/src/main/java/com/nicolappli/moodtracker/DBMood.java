@@ -9,15 +9,15 @@ import android.util.Log;
 public class DBMood extends SQLiteOpenHelper {
 
     public static class Constants implements BaseColumns {
-        public static final String DATABASE_NAME="DBMood.db"; //the database name
-        public static final int DATABASE_VERSION=1; //the database version
-        public static final String MY_TABLE="Mood"; //the table name
+        static final String DATABASE_NAME="DBMood.db"; //the database name
+        static final int DATABASE_VERSION=1; //the database version
+        static final String MY_TABLE="Mood"; //the table name
 
         // COLUMN NAME
-        public static final String KEY_COL_ID="_id";
-        public static final String KEY_COL_MOOD="mood";
-        public static final String KEY_COL_COMMENT="comment";
-        public static final String KEY_COL_DATE="date";
+        static final String KEY_COL_ID="_id";
+        static final String KEY_COL_MOOD="mood";
+        static final String KEY_COL_COMMENT="comment";
+        static final String KEY_COL_DATE="date";
 
         // COLUMN INDEX
         public static final int ID_COLUMN =1;
@@ -45,7 +45,7 @@ public class DBMood extends SQLiteOpenHelper {
      * @param version
      *              = Database's version
      */
-    public DBMood(Context context, String name, SQLiteDatabase.CursorFactory cursorFactory, int version){
+    DBMood(Context context, String name, SQLiteDatabase.CursorFactory cursorFactory, int version){
         super(context, name,cursorFactory,version);
     }
 
