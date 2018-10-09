@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -18,6 +19,7 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
     public static class MoodViewHolder extends RecyclerView.ViewHolder{
         public ImageButton mImageButton;
         public TextView mDate;
+        public RelativeLayout mRelativeLayout;
 
         public MoodViewHolder(View itemView) {
             super(itemView);
@@ -41,7 +43,7 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
     @Override
     public void onBindViewHolder(@NonNull MoodViewHolder holder, int position) {
         MoodItem currentItem = mMoodList.get(position);
-
+        //holder.mRelativeLayout.setBackgroundResource();
         holder.mDate.setText(currentItem.getDate());
     }
 
