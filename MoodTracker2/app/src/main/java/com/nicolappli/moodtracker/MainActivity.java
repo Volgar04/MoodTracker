@@ -35,8 +35,10 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Integer> color;
     private List<Integer> drawable;
+    DatabaseHelper moodDb;
 
-    private String commentary;
+    public String commentary;
+    public String currentDate;
     private int actualMoodScreen = 1;
 
             /**
@@ -81,8 +83,10 @@ public class MainActivity extends AppCompatActivity {
         initColor();
         initDrawable();
 
+        moodDb = new DatabaseHelper(this);
+
             //Recovery of the current date
-        String currentDate = new SimpleDateFormat("dd", Locale.getDefault()).format(new Date());
+        currentDate = new SimpleDateFormat("dd", Locale.getDefault()).format(new Date());
         System.out.println("current date => " + currentDate);
 
             //Display of the various screens according to gestures
@@ -126,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                         }else if(!mComment.getText().toString().isEmpty()){
                             commentary =mComment.getText().toString();
                             Toast.makeText(MainActivity.this,"Commentaire reçu",Toast.LENGTH_SHORT).show();
+                            addData();
                         }
                         else{
                             Toast.makeText(MainActivity.this,"Veuillez écrire un commentaire !",Toast.LENGTH_SHORT).show();
@@ -141,8 +146,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //***************** For the history activity *********************************************************************************************************************************************************/
 
+        //***************** For the history activity *********************************************************************************************************************************************************/
 
             //Launch an new activity when the user want to consult his mood history
         imageHistory.setOnClickListener(new View.OnClickListener() {
@@ -155,5 +160,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(historyActivityIntent);
             }
         });
+    }
+
+
+    //***************** Insert data into the database "mood.db" *******************************************************************************************************************************************/
+
+    public void addData(){
+        boolean isInserted= moodDb.insertData(actualMoodScreen,commentary,currentDate,color.get(actualMoodScreen));
+        if(isInserted){
+            Toast.makeText(MainActivity.this,"Humeur enregistrée",Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(MainActivity.this,"Erreur lors de l'insertion",Toast.LENGTH_LONG).show();
+        }
     }
 }
