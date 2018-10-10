@@ -21,17 +21,21 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
         public TextView mDate;
         public RelativeLayout mRelativeLayout;
 
+        //itemView is the view corresponding to one cell
         public MoodViewHolder(View itemView) {
             super(itemView);
             mImageButton=itemView.findViewById(R.id.imageButton);
             mDate=itemView.findViewById(R.id.dateItem);
+            mRelativeLayout=itemView.findViewById(R.id.relativeMoodItem);
         }
     }
 
+    //a constructor taking in entrance a list
     public MoodAdapter(ArrayList<MoodItem> moodList){
         mMoodList=moodList;
     }
 
+    //Allows to create viewHolder
     @NonNull
     @Override
     public MoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -40,10 +44,11 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
         return mvh;
     }
 
+    //the function to fill the cell
     @Override
     public void onBindViewHolder(@NonNull MoodViewHolder holder, int position) {
         MoodItem currentItem = mMoodList.get(position);
-        //holder.mRelativeLayout.setBackgroundResource();
+        //holder.mRelativeLayout.setBackgroundResource(mMoodList.get(position).getColor());
         holder.mDate.setText(currentItem.getDate());
     }
 

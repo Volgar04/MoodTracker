@@ -3,6 +3,7 @@ package com.nicolappli.moodtracker;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.support.v7.app.AlertDialog;
@@ -34,9 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Integer> color;
     private List<Integer> drawable;
-
-    public DBMood dbMood;
-    private SQLiteDatabase db;
 
     private String commentary;
     private int actualMoodScreen = 1;
@@ -82,13 +80,6 @@ public class MainActivity extends AppCompatActivity {
 
         initColor();
         initDrawable();
-
-            //Creation of database
-        dbMood = new DBMood(this, DBMood.Constants.DATABASE_NAME, null, DBMood.Constants.DATABASE_VERSION);
-        openDB();
-        ContentValues contentValues = new ContentValues();
-        long rowId = insertRecord(contentValues);
-        deleteRecord(rowId);
 
             //Recovery of the current date
         String currentDate = new SimpleDateFormat("dd", Locale.getDefault()).format(new Date());
@@ -158,78 +149,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent historyActivityIntent = new Intent(MainActivity.this, HistoryActivity.class);
+
+                historyActivityIntent.putExtra("moodChosen", actualMoodScreen);
+
                 startActivity(historyActivityIntent);
             }
         });
-    }
-
-
-    //***************** Database management ********************************************************************************************************************************************************************/
-
-    /**
-     * open the database
-     * @throws SQLiteException
-     */
-    public void openDB() throws SQLiteException {
-        try {
-            db = dbMood.getWritableDatabase();
-        } catch (SQLiteException ex) {
-            db = dbMood.getReadableDatabase();
-        }
-    }
-
-    /**
-     * close the database
-     */
-    public void closeDB() {
-        db.close();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        openDB();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        System.out.println("moodSave => " + actualMoodScreen);
-        System.out.println("commentaire => " + commentary);
-        closeDB();
-    }
-
-    //***************** Insert a new line **********************************************************************************************************************************************************************/
-
-    private long insertRecord(ContentValues contentValues) {
-        // Assign the values for each column.
-        contentValues.put(DBMood.Constants.KEY_COL_MOOD, actualMoodScreen);
-        contentValues.put(DBMood.Constants.KEY_COL_COMMENT, commentary);
-        contentValues.put(DBMood.Constants.KEY_COL_DATE, "22-01-2018");
-
-        long rowId = db.insert(DBMood.Constants.MY_TABLE, null, contentValues);
-
-        if (rowId == -1) {
-            Toast.makeText(this, "Erreur lors de l'insertion de la ligne dans la base de données !",
-                    Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "La ligne à bien été créée dans la base de données !",
-                    Toast.LENGTH_LONG).show();
-        }
-        return rowId;
-    }
-
-    //***************** Delete a line ********************************************************************************************************************************************************************/
-
-    private void deleteRecord(long rowId) {
-        rowId = db.delete(DBMood.Constants.MY_TABLE,
-                DBMood.Constants.KEY_COL_ID + "=" + rowId, null);
-        if (rowId == -1) {
-            Toast.makeText(this, "Erreur lors de la suppression !",
-                    Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "La suppression de la ligne a bien été effectuée !", Toast.LENGTH_LONG)
-                    .show();
-        }
     }
 }
