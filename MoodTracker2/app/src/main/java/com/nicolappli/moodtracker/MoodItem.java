@@ -2,24 +2,24 @@ package com.nicolappli.moodtracker;
 
 public class MoodItem {
     private String mDate;
-    private int mColor;
-    private int mSize;
+    private String mCommentary;
+    private int mMood;
 
-    public MoodItem(String date, int color, int size){
+    public MoodItem(String date, int mood, String commentary){
         mDate=date;
-        mColor=color;
-        mSize=size;
+        mMood=mood;
+        mCommentary=commentary;
     }
 
     public String getDate(){
         return mDate;
     }
 
-    public int getColor(){
-        return mColor;
+    public int getMood(){
+        return mMood;
     }
 
-    public int getSize(){
-        return mSize;
+    public String getCommentary(){
+        return mCommentary;
     }
 }

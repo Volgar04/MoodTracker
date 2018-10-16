@@ -1,11 +1,7 @@
 package com.nicolappli.moodtracker;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +12,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,14 +32,14 @@ public class MainActivity extends AppCompatActivity {
     private List<Integer> drawable;
     DatabaseHelper moodDb;
 
-    public String commentary;
+    public String commentary = " ";
     public String currentDate;
     private int actualMoodScreen = 1;
 
             /**
              * Method allowing to get back the good color of the background
              */
-    private void initColor(){
+    public void initColor(){
         color = new ArrayList<>();
 
         color.add(R.color.banana_yellow); //=0
@@ -57,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             /**
              * Method allowing to get back the good smiley
              */
-    private void initDrawable(){
+    public void initDrawable(){
         drawable = new ArrayList<>();
 
         drawable.add(R.drawable.smiley_super_happy); //=0
@@ -130,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
                         }else if(!mComment.getText().toString().isEmpty()){
                             commentary =mComment.getText().toString();
                             Toast.makeText(MainActivity.this,"Commentaire reçu",Toast.LENGTH_SHORT).show();
-                            addData();
                         }
                         else{
                             Toast.makeText(MainActivity.this,"Veuillez écrire un commentaire !",Toast.LENGTH_SHORT).show();
@@ -147,26 +141,24 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //***************** For the history activity *********************************************************************************************************************************************************/
+        //***************** To launch the history activity *********************************************************************************************************************************************************/
 
             //Launch an new activity when the user want to consult his mood history
         imageHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent historyActivityIntent = new Intent(MainActivity.this, HistoryActivity.class);
-
-                historyActivityIntent.putExtra("moodChosen", actualMoodScreen);
-
+                addData(); //add data in the database when user go to the history activity
                 startActivity(historyActivityIntent);
             }
         });
     }
 
 
-    //***************** Insert data into the database "mood.db" *******************************************************************************************************************************************/
+    //***************** Insert data into the database "mood.db" **********************************************************************************************************************************************/
 
     public void addData(){
-        boolean isInserted= moodDb.insertData(actualMoodScreen,commentary,currentDate,color.get(actualMoodScreen));
+        boolean isInserted= moodDb.insertData(actualMoodScreen,commentary,currentDate);
         if(isInserted){
             Toast.makeText(MainActivity.this,"Humeur enregistrée",Toast.LENGTH_LONG).show();
         }
