@@ -1,6 +1,5 @@
 package com.nicolappli.moodtracker;
 
-import android.app.AlertDialog;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,10 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder> {
@@ -57,13 +52,14 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
         //holder.mRelativeLayout.setBackgroundResource(mMoodList.get(position).getColor());
         holder.mDate.setText(currentItem.getDate());
 
-        if(mMoodList.get(position).getCommentary().equals("  ")){
+        if(mMoodList.get(position).getCommentary().equals(" ")){
             holder.mImageButton.setVisibility(View.INVISIBLE);
         }else{
+            holder.mImageButton.setVisibility(View.VISIBLE);
             holder.mImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Toast.makeText(, mMoodList.get(position).getCommentary(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(Context., mMoodList.get(position).getCommentary(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
