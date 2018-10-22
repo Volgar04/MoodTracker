@@ -9,10 +9,18 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.LocalDateTime;
+import org.joda.time.Period;
+
 import java.util.ArrayList;
 
 public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder> {
     private ArrayList<MoodItem> mMoodList;
+
 
     public static class MoodViewHolder extends RecyclerView.ViewHolder{
         public ImageButton mImageButton;
@@ -56,10 +64,12 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
             holder.mImageButton.setVisibility(View.INVISIBLE);
         }else{
             holder.mImageButton.setVisibility(View.VISIBLE);
+
             holder.mImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Toast.makeText(Context., mMoodList.get(position).getCommentary(), Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(mMoodList.get(position).getContext(),mMoodList.get(position).getCommentary(),Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -81,6 +91,14 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
             holder.mCardView.setBackgroundResource(R.color.faded_red);
             holder.mRelativeLayout.setBackgroundResource(R.color.faded_red);
         }
+
+        LocalDateTime localDateTime = new LocalDateTime();
+
+        String end=localDateTime.toString("dd-MM-yyyy");
+
+        //Period = new Period(start, end);
+
+
     }
 
     @Override

@@ -19,9 +19,11 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
         ArrayList<MoodItem> moodList = new ArrayList<>();
 
+
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
+        ((LinearLayoutManager) mLayoutManager).setReverseLayout(true);
         mAdapter = new MoodAdapter(moodList);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -36,7 +38,7 @@ public class HistoryActivity extends AppCompatActivity {
             String commentary = cursor.getString(cursor.getColumnIndex("COMMENTARY"));
             String date = cursor.getString(cursor.getColumnIndex("DATE"));
             int mood = cursor.getInt(cursor.getColumnIndex("MOOD"));
-            moodList.add(new MoodItem(date,mood,commentary));
+            moodList.add(new MoodItem(getApplicationContext(),date,mood,commentary));
         }while(cursor.moveToNext());
 
         moodDb.close();

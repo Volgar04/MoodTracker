@@ -12,6 +12,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     public String commentary = " ";
     public String currentDate;
+    LocalDateTime localDateTime = new LocalDateTime();
     private int actualMoodScreen = 1;
 
             /**
@@ -81,7 +86,9 @@ public class MainActivity extends AppCompatActivity {
         moodDb = new DatabaseHelper(this);
 
             //Recovery of the current date
-        currentDate = new SimpleDateFormat("dd", Locale.getDefault()).format(new Date());
+        //currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+        //System.out.println("current date => " + currentDate);
+        currentDate=localDateTime.toString("dd-MM-yyyy");
         System.out.println("current date => " + currentDate);
 
             //Display of the various screens according to gestures
@@ -124,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this,"Le commentaire doit être inférieur ou égal a 255",Toast.LENGTH_SHORT).show();
                         }else if(!mComment.getText().toString().isEmpty()){
                             commentary =mComment.getText().toString();
-                            Toast.makeText(MainActivity.this,"Commentaire reçu",Toast.LENGTH_SHORT).show();
+                            alertComment.cancel();
                         }
                         else{
                             Toast.makeText(MainActivity.this,"Veuillez écrire un commentaire !",Toast.LENGTH_SHORT).show();
@@ -158,12 +165,6 @@ public class MainActivity extends AppCompatActivity {
     //***************** Insert data into the database "mood.db" **********************************************************************************************************************************************/
 
     public void addData(){
-        boolean isInserted= moodDb.insertData(actualMoodScreen,commentary,currentDate);
-        if(isInserted){
-            Toast.makeText(MainActivity.this,"Humeur enregistrée",Toast.LENGTH_LONG).show();
-        }
-        else{
-            Toast.makeText(MainActivity.this,"Erreur lors de l'insertion",Toast.LENGTH_LONG).show();
-        }
+        moodDb.insertData(actualMoodScreen,commentary,currentDate);
     }
 }

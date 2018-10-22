@@ -6,14 +6,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="#B6B7B7"
     android:id="@+id/cardView"
-    android:layout_margin="2dp"
-    app:cardCornerRadius="4dp">
+    android:layout_margin="1dp">
 
     <android.support.percent.PercentRelativeLayout
         android:id="@+id/relativeMoodItem"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_margin="2dp">
+        android:layout_height="80dp">
 
         <TextView
             android:id="@+id/dateItem"
