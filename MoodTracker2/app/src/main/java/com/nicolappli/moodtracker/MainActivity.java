@@ -12,8 +12,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
-import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 
 import java.text.SimpleDateFormat;
@@ -38,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
     public String commentary = " ";
     public String currentDate;
-    LocalDateTime localDateTime = new LocalDateTime();
     private int actualMoodScreen = 1;
 
             /**
@@ -86,10 +83,7 @@ public class MainActivity extends AppCompatActivity {
         moodDb = new DatabaseHelper(this);
 
             //Recovery of the current date
-        //currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-        //System.out.println("current date => " + currentDate);
-        currentDate=localDateTime.toString("dd-MM-yyyy");
-        System.out.println("current date => " + currentDate);
+        currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
 
             //Display of the various screens according to gestures
         principalScreen.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
@@ -156,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent historyActivityIntent = new Intent(MainActivity.this, HistoryActivity.class);
                 addData(); //add data in the database when user go to the history activity
+                commentary=" ";
                 startActivity(historyActivityIntent);
             }
         });
