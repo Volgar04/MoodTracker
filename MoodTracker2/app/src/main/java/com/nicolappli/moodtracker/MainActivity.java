@@ -6,14 +6,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import org.joda.time.LocalDateTime;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Integer> drawable;
     DatabaseHelper moodDb;
 
-    public String commentary = " ";
+    public String commentary = "";
     public String currentDate;
     private int actualMoodScreen = 1;
 
@@ -150,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent historyActivityIntent = new Intent(MainActivity.this, HistoryActivity.class);
                 addData(); //add data in the database when user go to the history activity
-                commentary=" ";
+                commentary="";
                 startActivity(historyActivityIntent);
             }
         });

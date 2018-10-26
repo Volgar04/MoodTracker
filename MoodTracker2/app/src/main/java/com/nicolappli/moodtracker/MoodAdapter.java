@@ -1,13 +1,14 @@
 package com.nicolappli.moodtracker;
 
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.text.ParseException;
@@ -20,24 +21,24 @@ import java.util.concurrent.TimeUnit;
 public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder> {
     private ArrayList<MoodItem> mMoodList;
 
-    public static class MoodViewHolder extends RecyclerView.ViewHolder{
-        public ImageButton mImageButton;
-        public TextView mDate;
-        public RelativeLayout mRelativeLayout;
-        public CardView mCardView;
+    static class MoodViewHolder extends RecyclerView.ViewHolder{
+        ImageButton mImageButton;
+        TextView mDate;
+        ConstraintLayout mConstraintLayout;
+        CardView mCardView;
 
         //itemView is the view corresponding to one cell
-        public MoodViewHolder(View itemView) {
+        MoodViewHolder(View itemView) {
             super(itemView);
             mImageButton=itemView.findViewById(R.id.imageButton);
             mDate=itemView.findViewById(R.id.dateItem);
-            mRelativeLayout=itemView.findViewById(R.id.relativeMoodItem);
+            mConstraintLayout=itemView.findViewById(R.id.constraintLayout);
             mCardView=itemView.findViewById(R.id.cardView);
         }
     }
 
     //MoodAdapter constructor's taking in entrance a list
-    public MoodAdapter(ArrayList<MoodItem> moodList){
+    MoodAdapter(ArrayList<MoodItem> moodList){
         mMoodList=moodList;
     }
 
@@ -46,8 +47,8 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
     @Override
     public MoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v=LayoutInflater.from(parent.getContext()).inflate(R.layout.mood_item, parent, false);
-        MoodViewHolder mvh = new MoodViewHolder(v);
-        return mvh;
+        v.getLayoutParams().height = parent.getHeight()/7;
+        return new MoodViewHolder(v);
     }
 
     //the function to fill the cell
@@ -56,9 +57,7 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
         final MoodItem currentItem = mMoodList.get(position);
 
         //Show the commentary if the user wrote one
-        if(currentItem.getCommentary().equals(" ")){
-            holder.mImageButton.setVisibility(View.INVISIBLE);
-        }else{
+        if(!currentItem.getCommentary().isEmpty()){
             holder.mImageButton.setVisibility(View.VISIBLE);
 
             holder.mImageButton.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +66,8 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
                     Toast.makeText(currentItem.getContext(),currentItem.getCommentary(),Toast.LENGTH_SHORT).show();
                 }
             });
+        }else{
+            holder.mImageButton.setVisibility(View.INVISIBLE);
         }
 
         //Show the good colors
@@ -81,29 +82,39 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
     }
 
     private void displayColor(MoodItem currentItem, final MoodViewHolder holder){
+        ConstraintSet set = new ConstraintSet();
+        set.clone(holder.mConstraintLayout);
+
+
         if(currentItem.getMood() == 0){
-            holder.mRelativeLayout.setBackgroundResource(R.color.banana_yellow);
+            holder.mCardView.setBackgroundResource(R.color.banana_yellow);
+            set.connect(holder.mCardView.getId(), ConstraintSet.END, R.id.guideline100, ConstraintSet.END,0);
         }else if(currentItem.getMood() == 1){
-            holder.mRelativeLayout.setBackgroundResource(R.color.light_sage);
+            holder.mCardView.setBackgroundResource(R.color.light_sage);
+            set.connect(holder.mCardView.getId(), ConstraintSet.END, R.id.guideline84, ConstraintSet.END,0);
         }else if(currentItem.getMood() == 2){
-            holder.mRelativeLayout.setBackgroundResource(R.color.cornflower_blue_65);
+            holder.mCardView.setBackgroundResource(R.color.cornflower_blue_65);
+            set.connect(holder.mCardView.getId(), ConstraintSet.END, R.id.guideline68, ConstraintSet.END,0);
         }else if(currentItem.getMood() == 3){
-            holder.mRelativeLayout.setBackgroundResource(R.color.warm_grey);
+            holder.mCardView.setBackgroundResource(R.color.warm_grey);
+            set.connect(holder.mCardView.getId(), ConstraintSet.END, R.id.guideline52, ConstraintSet.END,0);
         }else if(currentItem.getMood() == 4){
-            holder.mRelativeLayout.setBackgroundResource(R.color.faded_red);
+            holder.mCardView.setBackgroundResource(R.color.faded_red);
+            set.connect(holder.mCardView.getId(), ConstraintSet.END, R.id.guideline36, ConstraintSet.END,0);
         }
+        set.applyTo(holder.mConstraintLayout);
     }
 
     private void showDate(MoodItem currentItem, final MoodViewHolder holder){
         String registerDate = currentItem.getDate();
         String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", new Locale("FR"));
 
         try {
             Date dateStart =format.parse(registerDate);
             Date dateEnd = format.parse(currentDate);
             getDaysDifference(dateStart,dateEnd);
-            long numberOfDays = getUnitBetweenDates(dateStart,dateEnd,TimeUnit.DAYS);
+            long numberOfDays = getUnitBetweenDates(dateEnd,dateStart);
             String displayNumberOfDay;
             if(numberOfDays==0){
                 displayNumberOfDay = "Aujourd'hui";
@@ -123,13 +134,13 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
         }
     }
 
-    private static long getUnitBetweenDates(Date date, Date dayDate, TimeUnit days) {
+    private static long getUnitBetweenDates(Date date, Date dayDate) {
+        TimeUnit days = TimeUnit.DAYS;
         long timeDiff = date.getTime() - dayDate.getTime();
         return days.convert(timeDiff, TimeUnit.MILLISECONDS);
     }
 
-    private static void getDaysDifference(Date fromDate, Date toDate)
-    {
+    private static void getDaysDifference(Date fromDate, Date toDate) {
         toDate.getTime();
         fromDate.getTime();
     }
