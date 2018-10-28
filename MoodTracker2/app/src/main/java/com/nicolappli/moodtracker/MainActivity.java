@@ -2,11 +2,11 @@ package com.nicolappli.moodtracker;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -79,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
         initColor();
         initDrawable();
 
+        final MediaPlayer sound1 = MediaPlayer.create(this, R.raw.son1);
+        final MediaPlayer sound2 = MediaPlayer.create(this, R.raw.son2);
+        final MediaPlayer sound3 = MediaPlayer.create(this, R.raw.son3);
+        final MediaPlayer sound4 = MediaPlayer.create(this, R.raw.son4);
+        final MediaPlayer sound5 = MediaPlayer.create(this, R.raw.son5);
+
         moodDb = new DatabaseHelper(this);
 
             //Recovery of the current date
@@ -91,17 +97,27 @@ public class MainActivity extends AppCompatActivity {
                 if(actualMoodScreen<0){
                     actualMoodScreen=0;
                 }
-                    principalScreen.setBackgroundResource(color.get(actualMoodScreen));
-                    imageSmiley.setImageResource(drawable.get(actualMoodScreen));
+                principalScreen.setBackgroundResource(color.get(actualMoodScreen));
+                imageSmiley.setImageResource(drawable.get(actualMoodScreen));
+                if(actualMoodScreen==0) sound1.start();
+                else if(actualMoodScreen==1) sound2.start();
+                else if(actualMoodScreen==2) sound3.start();
+                else if(actualMoodScreen==3) sound4.start();
+                else if(actualMoodScreen==4) sound5.start();
             }
 
             public void onSwipeBottom() {
                 actualMoodScreen++;
-                if(actualMoodScreen>4){
-                    actualMoodScreen=4;
+                if (actualMoodScreen > 4) {
+                    actualMoodScreen = 4;
                 }
                 principalScreen.setBackgroundResource(color.get(actualMoodScreen));
                 imageSmiley.setImageResource(drawable.get(actualMoodScreen));
+                if(actualMoodScreen==0) sound1.start();
+                else if(actualMoodScreen==1) sound2.start();
+                else if(actualMoodScreen==2) sound3.start();
+                else if(actualMoodScreen==3) sound4.start();
+                else if(actualMoodScreen==4) sound5.start();
             }
         });
 
