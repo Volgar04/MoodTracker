@@ -39,6 +39,8 @@ public class HistoryActivity extends AppCompatActivity {
             int mood = cursor.getInt(cursor.getColumnIndex("MOOD"));
             moodList.add(new MoodItem(getApplicationContext(),date,mood,commentary));
         }while(cursor.moveToNext());
+        //remove the last item which corresponds to the mood of the day
+        moodList.remove(0);
         moodDb.close();
     }
 }

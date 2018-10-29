@@ -46,7 +46,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getData(){
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY ID DESC LIMIT 7", null);
-        //return db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY ID DESC LIMIT 8", null);
+    }
+
+    public void removeData(String date){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String tableName = TABLE_NAME;
+        String whereClause = "DATE=?";
+        String[] whereArgs = new String[] {date};
+        db.delete(tableName,whereClause,whereArgs);
     }
 }

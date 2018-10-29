@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         initColor();
         initDrawable();
 
+            //Creation of variables sound
         final MediaPlayer sound1 = MediaPlayer.create(this, R.raw.son1);
         final MediaPlayer sound2 = MediaPlayer.create(this, R.raw.son2);
         final MediaPlayer sound3 = MediaPlayer.create(this, R.raw.son3);
@@ -157,15 +158,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //***************** To launch the history activity *********************************************************************************************************************************************************/
+        //***************** To launch the history activity ****************************************************************************************************************************************************/
 
             //Launch an new activity when the user want to consult his mood history
         imageHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent historyActivityIntent = new Intent(MainActivity.this, HistoryActivity.class);
-                addData(); //add data in the database when user go to the history activity
-                commentary="";
                 startActivity(historyActivityIntent);
             }
         });
@@ -175,6 +174,16 @@ public class MainActivity extends AppCompatActivity {
     //***************** Insert data into the database "mood.db" **********************************************************************************************************************************************/
 
     public void addData(){
+        moodDb.removeData(currentDate);
         moodDb.insertData(actualMoodScreen,commentary,currentDate);
+    }
+
+    //***************** Remove data into the database "mood.db" if a row with currentDate already exist *******************************************************************************************************/
+
+    @Override
+    protected void onPause() {
+        addData();
+        commentary="";
+        super.onPause();
     }
 }
