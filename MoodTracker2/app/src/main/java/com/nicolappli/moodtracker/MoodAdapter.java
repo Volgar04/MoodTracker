@@ -37,12 +37,18 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
         }
     }
 
-    //MoodAdapter constructor's taking in entrance a list
+    /**
+     * MoodAdapter constructor's taking in entrance a list
+     * @param moodList = the list which contains
+     */
     MoodAdapter(ArrayList<MoodItem> moodList){
         mMoodList=moodList;
     }
 
-    //Allows to create viewHolder
+    /**
+     * Allows to create viewHolder
+     * @return the view
+     */
     @NonNull
     @Override
     public MoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,7 +57,11 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
         return new MoodViewHolder(v);
     }
 
-    //the function to fill the cell
+    /**
+     * the function to fill the cell
+     * @param holder = update the recycler view contents
+     * @param position = the position of the current item
+     */
     @Override
     public void onBindViewHolder(@NonNull final MoodViewHolder holder, final int position) {
         final MoodItem currentItem = mMoodList.get(position);
@@ -81,10 +91,14 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
         return mMoodList.size();
     }
 
+    /**
+     * display the good color and the good size of the current item according to the mood in the database
+     * @param currentItem = the actual item
+     * @param holder = update the recycler view contents
+     */
     private void displayColor(MoodItem currentItem, final MoodViewHolder holder){
         ConstraintSet set = new ConstraintSet();
         set.clone(holder.mConstraintLayout);
-
 
         if(currentItem.getMood() == 0){
             holder.mCardView.setBackgroundResource(R.color.banana_yellow);
@@ -105,6 +119,11 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
         set.applyTo(holder.mConstraintLayout);
     }
 
+    /**
+     * display the date
+     * @param currentItem = the actual item
+     * @param holder = update the recycler view contents
+     */
     private void showDate(MoodItem currentItem, final MoodViewHolder holder){
         String registerDate = currentItem.getDate();
         String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
@@ -113,13 +132,9 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
         try {
             Date dateStart =format.parse(registerDate);
             Date dateEnd = format.parse(currentDate);
-            getDaysDifference(dateStart,dateEnd);
             long numberOfDays = getUnitBetweenDates(dateEnd,dateStart);
             String displayNumberOfDay;
-            if(numberOfDays==0){
-                displayNumberOfDay = "Aujourd'hui";
-            }
-            else if(numberOfDays==1){
+            if(numberOfDays==1){
                 displayNumberOfDay = "Hier";
             }
             else if(numberOfDays==2){
@@ -134,14 +149,15 @@ public class MoodAdapter extends RecyclerView.Adapter<MoodAdapter.MoodViewHolder
         }
     }
 
+    /**
+     * Method to have difference between two dates
+     * @param date = current date
+     * @param dayDate = register date
+     * @return = the difference (int)
+     */
     private static long getUnitBetweenDates(Date date, Date dayDate) {
         TimeUnit days = TimeUnit.DAYS;
         long timeDiff = date.getTime() - dayDate.getTime();
         return days.convert(timeDiff, TimeUnit.MILLISECONDS);
-    }
-
-    private static void getDaysDifference(Date fromDate, Date toDate) {
-        toDate.getTime();
-        fromDate.getTime();
     }
 }

@@ -16,7 +16,7 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
         ArrayList<MoodItem> moodList = new ArrayList<>();
 
-        //Call classes
+        //Call classes for the RecyclerView and the Database
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         RecyclerView.Adapter adapter = new MoodAdapter(moodList);
         moodDb = new DatabaseHelper(this);

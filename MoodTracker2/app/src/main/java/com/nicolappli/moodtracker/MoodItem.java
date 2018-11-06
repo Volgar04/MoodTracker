@@ -8,7 +8,7 @@ public class MoodItem {
     private int mMood;
     private Context mContext;
 
-    public MoodItem(Context context, String date, int mood, String commentary){
+    MoodItem(Context context, String date, int mood, String commentary){
         mDate=date;
         mMood=mood;
         mCommentary=commentary;
@@ -19,15 +19,15 @@ public class MoodItem {
         return mDate;
     }
 
-    public int getMood(){
+    int getMood(){
         return mMood;
     }
 
-    public String getCommentary(){
+    String getCommentary(){
         return mCommentary;
     }
 
-    public Context getContext(){
+    Context getContext(){
         return mContext;
     }
 }

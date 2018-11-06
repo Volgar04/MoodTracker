@@ -1,7 +1,12 @@
 <resources>
     <string name="app_name">MoodTracker</string>
-    <string name="toastTop">Haut</string>
-    <string name="toastRight">Droite</string>
-    <string name="toastLeft">Gauche</string>
-    <string name="toastBottom">Bas</string>
+    <string name="txtViewCommentaryName">Commentaire</string>
+    <string name="commentaryHint">Laissez un commentaire sur votre humeur actuelle</string>
+    <string name="commentaryValidate">Valider</string>
+    <string name="commentaryCancel">Annuler</string>
+    <string name="smileyContentDescription">smiley</string>
+    <string name="addCommentaryContentDescription">addCommentary</string>
+    <string name="viewHistoryContentDescription">viewHistory</string>
+    <string name="moodItemDateTxt">date</string>
+    <string name="moodItemCommentaryContentDescription">comment_icon</string>
 </resources>

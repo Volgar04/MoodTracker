@@ -7,14 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "moodTracker.db";
-    public static final String TABLE_NAME = "mood";
-    public static final String COL_1 = "_id";
-    public static final String COL_2 = "mood";
-    public static final String COL_3 = "commentary";
-    public static final String COL_4 = "date";
+    private static final String DATABASE_NAME = "moodTracker.db";
+    private static final String TABLE_NAME = "mood";
+    private static final String COL_2 = "mood";
+    private static final String COL_3 = "commentary";
+    private static final String COL_4 = "date";
 
-    public DatabaseHelper(Context context) {
+    DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 3);
     }
 
@@ -29,19 +28,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertData(int mood, String commentary, String date){
+    void insertData(int mood, String commentary, String date){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_2, mood);
         contentValues.put(COL_3, commentary);
         contentValues.put(COL_4, date);
-        long result = db.insert(TABLE_NAME,null, contentValues);
-        if(result==-1){
-            return false;
-        }
-        else{
-            return true;
-        }
+        db.insert(TABLE_NAME,null, contentValues);
     }
 
     public Cursor getData(){
@@ -49,11 +42,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY ID DESC LIMIT 8", null);
     }
 
-    public void removeData(String date){
+    Cursor getLastData(){
         SQLiteDatabase db = this.getWritableDatabase();
-        String tableName = TABLE_NAME;
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY ID DESC LIMIT 1", null);
+    }
+
+    void removeData(String date){
+        SQLiteDatabase db = this.getWritableDatabase();
         String whereClause = "DATE=?";
         String[] whereArgs = new String[] {date};
-        db.delete(tableName,whereClause,whereArgs);
+        db.delete(TABLE_NAME,whereClause,whereArgs);
     }
 }

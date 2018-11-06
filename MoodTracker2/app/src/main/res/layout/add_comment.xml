@@ -13,26 +13,25 @@
         android:textStyle="bold"
         android:textSize="25sp"
         android:paddingTop="5dp"
-        android:text="Commentaire" />
+        android:text="@string/txtViewCommentaryName" />
 
     <EditText
         android:id="@+id/etxCommentUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="Laissez un commentaire sur votre humeur actuelle"
-        android:importantForAutofill="no"
+        android:hint="@string/commentaryHint"
         android:inputType="" />
 
     <Button
         android:id="@+id/btnOk"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Valider" />
+        android:text="@string/commentaryValidate" />
 
     <Button
         android:id="@+id/btnCancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Annuler" />
+        android:text="@string/commentaryCancel" />
 </LinearLayout>

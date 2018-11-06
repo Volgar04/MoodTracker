@@ -4,7 +4,7 @@
     package="com.nicolappli.moodtracker">
 
     <application
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/mood_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"

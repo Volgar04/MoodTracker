@@ -2,6 +2,7 @@ package com.nicolappli.moodtracker;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -33,9 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private List<Integer> drawable;
     DatabaseHelper moodDb;
 
-    public String commentary = "";
+    public String commentary;
     public String currentDate;
-    private int actualMoodScreen = 1;
+    private int actualMoodScreen;
 
             /**
              * Method allowing to get back the good color of the background
@@ -76,20 +77,40 @@ public class MainActivity extends AppCompatActivity {
         imageComment=findViewById(R.id.imageComment);
         imageHistory=findViewById(R.id.imageHistory);
 
+        moodDb = new DatabaseHelper(this);
+
         initColor();
         initDrawable();
 
-            //Creation of variables sound
+            //Creation of the variables the sound
         final MediaPlayer sound1 = MediaPlayer.create(this, R.raw.son1);
         final MediaPlayer sound2 = MediaPlayer.create(this, R.raw.son2);
         final MediaPlayer sound3 = MediaPlayer.create(this, R.raw.son3);
         final MediaPlayer sound4 = MediaPlayer.create(this, R.raw.son4);
         final MediaPlayer sound5 = MediaPlayer.create(this, R.raw.son5);
 
-        moodDb = new DatabaseHelper(this);
-
             //Recovery of the current date
         currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+
+            //If the last date in the table is equals to the current date, the screen is set with the respective smiley and mood
+        Cursor cursor = moodDb.getLastData();
+        cursor.moveToFirst();
+
+        String commentaryLastRow = cursor.getString(cursor.getColumnIndex("COMMENTARY"));
+        String date = cursor.getString(cursor.getColumnIndex("DATE"));
+        int moodLastRow = cursor.getInt(cursor.getColumnIndex("MOOD"));
+
+        if(date.equals(currentDate)){
+            principalScreen.setBackgroundResource(color.get(moodLastRow));
+            imageSmiley.setImageResource(drawable.get(moodLastRow));
+            commentary=commentaryLastRow;
+            actualMoodScreen=moodLastRow;
+        }
+        else{
+            actualMoodScreen=1;
+            commentary="";
+        }
+
 
             //Display of the various screens according to gestures
         principalScreen.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
@@ -127,24 +148,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder comment = new AlertDialog.Builder(MainActivity.this);
-                final View commentView = getLayoutInflater().inflate(R.layout.add_comment, null);
+                @SuppressLint("InflateParams") final View commentView = getLayoutInflater().inflate(R.layout.add_comment, null);
                 final EditText mComment= commentView.findViewById(R.id.etxCommentUser);
                 Button mOk=commentView.findViewById(R.id.btnOk);
                 Button mCancel=commentView.findViewById(R.id.btnCancel);
                 comment.setView(commentView);
+                mComment.setText(commentary); //set the commentary if the variable isn't empty
                 final AlertDialog alertComment = comment.create();
                 alertComment.show();
                 mOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                            //if the commentary is bigger than 255 a toast message appears
                         if(mComment.getText().toString().length()>=255){
-                            Toast.makeText(MainActivity.this,"Le commentaire doit être inférieur ou égal a 255",Toast.LENGTH_SHORT).show();
-                        }else if(!mComment.getText().toString().isEmpty()){
-                            commentary =mComment.getText().toString();
-                            alertComment.cancel();
+                            Toast.makeText(MainActivity.this,"Le commentaire doit être inférieur ou égal a 255 caractères !",Toast.LENGTH_SHORT).show();
                         }
                         else{
-                            Toast.makeText(MainActivity.this,"Veuillez écrire un commentaire !",Toast.LENGTH_SHORT).show();
+                            commentary = mComment.getText().toString();
+                            alertComment.cancel();
                         }
                     }
                 });
